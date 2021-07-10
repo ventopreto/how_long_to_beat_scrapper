@@ -1,0 +1,33 @@
+AllCops:
+ TargetRubyVersion: 3.0.1
+ Exclude:
+   - 'bin/**/*'
+   - 'vendor/**/*'
+   - 'db/**/*'
+   - 'config/**/*'
+   - 'script/**/*'
+   - 'spec/rails_helper.rb'
+
+AllCops:
+  NewCops: enable
+
+Metrics/BlockLength:
+ IgnoredMethods: ['describe', 'context', 'feature', 'scenario', 'let', 'it']
+
+Layout/LineLength:
+  Max: 140
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+Lint/SymbolConversion:
+    Enabled: false
+
+Style/Documentation: 
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
