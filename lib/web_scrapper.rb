@@ -21,4 +21,16 @@ class WebScrapper
     }
     Faraday.post(url, body, headers)
   end
+
+  def format_time(time)
+    if time.include?('½')
+      time.gsub(/(\d+)(½)? (Hours?|Mins?)/, '\1:30:00')
+    elsif time.include?('Mins')
+      time.gsub(/(\d+)(½)? (Hours?|Mins?)/, '00:\1:00')
+    elsif time == '--'
+      time
+    else
+      time.gsub(/(\d+)(½)? (Hours?|Mins?)/, '\1:00:00')
+    end
+  end
 end
