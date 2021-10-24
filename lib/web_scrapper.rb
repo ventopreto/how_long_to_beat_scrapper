@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
-require 'faraday'
+require './config/boot'
+
 class WebScrapper
-  def hltb_request(game)
+  def self.hltb_request(game)
     url = 'https://howlongtobeat.com/search_results?page=1'
     body =    {
       'page': '1',
@@ -22,7 +22,19 @@ class WebScrapper
     Faraday.post(url, body, headers)
   end
 
-  def format_time(time)
+  def self.hltb_parse(response)
+    return 'Não é possivel parsear uma resposta vazia' if response.body.include?('No results for')
+
+    doc = Nokogiri::HTML(response.body)
+    JSON.pretty_generate({
+                           'title' => doc.css('div.search_list_details > h3 > a')[0].text.strip,
+                           'main_story' => doc.css('div.search_list_details > div > div > div:nth-child(2)')[0].text.strip,
+                           'main_+_extra' => doc.css('div.search_list_details > div > div > div:nth-child(4)')[0].text.strip,
+                           'completionist' => doc.css('div.search_list_details > div > div > div:nth-child(6)')[0].text.strip
+                         })
+  end
+
+  def self.format_time(time)
     if time.include?('½')
       time.gsub(/(\d+)(½)? (Hours?|Mins?)/, '\1:30:00')
     elsif time.include?('Mins')
